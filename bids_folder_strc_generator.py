@@ -146,7 +146,7 @@ def hcp2bids(input_dir, output_dir):
             shutil.move(dwi_file, path_filename)
             dwi_json_dict = {}
             dwi_json_dict["EffectiveEchoSpacing"] = 0.00078
-            dwi_json_dict["TotalReadoutTime"] = 0.60
+            dwi_json_dict["TotalReadoutTime"] = 0.111542
             dwi_json_dict["EchoTime"] = 0.08950
             if dwi_file[-9:-7] == 'LR':
                 dwi_json_dict["PhaseEncodingDirection"] = "i-"
@@ -173,7 +173,7 @@ def hcp2bids(input_dir, output_dir):
             print(filename)
             dwi_json_dict = {}
             dwi_json_dict["EffectiveEchoSpacing"] = 0.00078
-            dwi_json_dict["TotalReadoutTime"] = 0.60
+            dwi_json_dict["TotalReadoutTime"] = 0.111542
             dwi_json_dict["EchoTime"] = 0.08950
             if filename_split[7][:2] == 'LR':
                 dwi_json_dict["PhaseEncodingDirection"] = "i-"
@@ -277,8 +277,9 @@ for subjects in sub_dir:
 Diffusion requirements - effective echo spacing
 Siemens turbo factor is Echo Train length - 78
 
-Total readout time (FSL) = (number of echoes - 1) * echo spacing
-   = 77* 0.0078 = 0.60
+# TotalReadoutTime = Echo spacing * (ReconMatrixPE - 1)
+# TotalReadoutTime = 0.00078 * (143-1) = 0.11154
+# https://neurostars.org/t/what-is-the-totalreadouttime-of-hcp-dwi-data/19622
 
 '''
 dMRI\DWI_RL_dir95   - TE 0.0895
