@@ -381,7 +381,12 @@ def hcp2bids(input_dir, output_dir, s_link = False):
             
             dwi_json_dict = {}
             dwi_json_dict["EffectiveEchoSpacing"] = 0.00078
-            dwi_json_dict["TotalReadoutTime"] = 0.60
+            # TotalReadoutTime = Echo spacing * (ReconMatrixPE - 1)
+            # TotalReadoutTime = 0.00078 * (144-1) = 0.11154
+            # https://neurostars.org/t/what-is-the-totalreadouttime-of-hcp-dwi-data/19622
+            # Recon Matrix PE = 144 based on
+            # https://www.humanconnectome.org/storage/app/media/documentation/s1200/HCP_S1200_Release_Reference_Manual.pdf
+            dwi_json_dict["TotalReadoutTime"] = 0.11154
             dwi_json_dict["EchoTime"] = 0.08950
         
             if dwi_file[-9:-7] == 'LR':
@@ -414,7 +419,12 @@ def hcp2bids(input_dir, output_dir, s_link = False):
             print(path_filename)
             dwi_json_dict = {}
             dwi_json_dict["EffectiveEchoSpacing"] = 0.00078
-            dwi_json_dict["TotalReadoutTime"] = 0.60
+            # TotalReadoutTime = Echo spacing * (ReconMatrixPE - 1)
+            # TotalReadoutTime = 0.00078 * (144-1) = 0.11154
+            # https://neurostars.org/t/what-is-the-totalreadouttime-of-hcp-dwi-data/19622
+            # Recon Matrix PE = 144 based on
+            # https://www.humanconnectome.org/storage/app/media/documentation/s1200/HCP_S1200_Release_Reference_Manual.pdf
+            dwi_json_dict["TotalReadoutTime"] = 0.11154
             dwi_json_dict["EchoTime"] = 0.08950
             
             if filename_split[-1].split('_')[-2][:2] == 'LR':
@@ -585,11 +595,11 @@ def json_toplevel(output_dir):
         LR = re.search('acq-LR', json_file)
         if LR is not None:
             print("its LR ")
-            addline = {"PhaseEncodingDirection": "i"}
+            addline = {"PhaseEncodingDirection": "i-"}
         RL = re.search('acq-RL', json_file)
         if RL is not None:
             print("its RL ")
-            addline = {"PhaseEncodingDirection": "i-"}
+            addline = {"PhaseEncodingDirection": "i"}
         z = bold_json_dict.copy()
         z.update(addline)
         task=json_file.replace(output_dir,"").split('_')[0].split('-')[1]              
